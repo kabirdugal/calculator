@@ -118,6 +118,18 @@ function operate(operator, num1, num2) {
     }
 }
 
+// delete functionality
+function backspace() {
+    if (displayValue === '0') {
+        return;
+    } else if (String(displayValue).length === 1) {
+        displayValue = '0';
+    } else {
+        displayValue = displayValue.substring(0, displayValue.length - 1)
+        
+    }
+}
+
 // Adds functionality to each calc button
 btns.forEach(btn => btn.addEventListener('click', function(e) {
     if (e.target.classList.contains('num-btn')) { // number button
@@ -219,6 +231,10 @@ document.addEventListener('keydown', function (e) {
     }
     if (e.key === 'Enter') {
         inputEquals();
+        updateDisplay();
+    }
+    if (e.key === 'Backspace') {
+        backspace();
         updateDisplay();
     }
   });
