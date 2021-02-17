@@ -1,71 +1,131 @@
 const screen = document.querySelector('.calc-screen');
-const numBtns = document.querySelectorAll('.num-btn');
-const opBtns = document.querySelectorAll('.op-btn');
-const equalsBtn = document.querySelector('.equals-btn');
-const allClearBtn = document.querySelector('.clear-btn');
 let btns = document.querySelectorAll('.btn');
 
-let displayValue = '0';
-let operandList = [];
-let operatorList = [];
-
+let displayValue = '0'
 let firstOperand = null;
-let operator = null;
 let secondOperand = null;
-
+let currentOperator = null;
 
 // updates display
 function updateDisplay() {
-    
-    if (displayValue.length > 16) {
-        screen.innerText = displayValue.substring(0, 16);
+    if (displayValue.length > 13) {
+        screen.innerText = displayValue.substring(0, 13);
     } else {
         screen.innerText = displayValue;
     }
 }
+updateDisplay();
 
 
 btns.forEach(btn => btn.addEventListener('click', function(e) {
-    if (e.target.classList.contains('num-btn')) {            // number button
-        const val = e.target.id;
-        if (displayValue === '0' || operator !== null) {
-            displayValue = val;
-            updateDisplay();
-        } else {
-            displayValue += val;
-            updateDisplay();
-        }
+    
+    if (e.target.classList.contains('num-btn')) { // number button
+        inputOperand(e.target.id);
+        updateDisplay();
 
     } else if (e.target.classList.contains('op-btn')) {      // operator button
-        firstOperand = displayValue;
-        operator = e.target.id;
+        console.log(displayValue, firstOperand, secondOperand, currentOperator);
+        inputOperator(e.target.id);
+        updateDisplay();
         
     } else if (e.target.classList.contains('equals-btn')) {  // equals button
-        secondOperand = displayValue;
-        displayValue = operate(operator, firstOperand, secondOperand);
+        console.log(displayValue, firstOperand, secondOperand, currentOperator);
+        inputEquals();
         updateDisplay();
 
     } else if (e.target.classList.contains('clear-btn')) {   // clear button
-        firstOperand = null;
-        operator = null;
-        secondOperand = null;
-        displayValue = '0';
+        clearDisplay();
         updateDisplay();
 
     } else if (e.target.classList.contains('decimal-btn')) { // decimal button
-        displayValue = displayValue + e.target.id; // appends decimal to displayValue
+        inputDecimal(e.target.id); // appends decimal to displayValue
         updateDisplay();
 
     } else if (e.target.classList.contains('percent-btn')) { // percent button
-        displayValue = displayValue / 100;
+        inputPercent();
         updateDisplay();
 
     } else if (e.target.classList.contains('plus-minus-btn')) {  // plus/minus button
-        displayValue = displayValue * -1;
+        inputSignSwitch();
         updateDisplay();
     }
     
 }))
+
+
+function inputOperand(operand) {
+    if(currentOperator === null) {
+        if(displayValue === '0' || displayValue === 0) {
+            displayValue = operand;
+        } else if(displayValue === firstOperand) {
+            displayValue = operand;
+        } else {
+            displayValue += operand;
+        }
+    } else {
+        if(displayValue === firstOperand) {
+            displayValue = operand;
+        } else {
+            displayValue += operand;
+        }
+    }
+}
+
+
+function inputOperator(op) {
+    if (firstOperand === null) {
+        firstOperand = displayValue;
+        currentOperator = op;
+    } else {
+        secondOperand = displayValue;
+        result = operate(currentOperator, firstOperand, secondOperand);
+        displayValue = result;
+        firstOperand = result;
+        currentOperator = op;
+    }
+
+}
+
+function inputEquals() {
+    if (firstOperand === null) {
+        displayValue = displayValue;
+    } else  {
+        secondOperand = displayValue;
+        result = operate(currentOperator, firstOperand, secondOperand);
+        if (result === 'lol') {
+            displayValue = 'ERROR'
+        } else {
+            displayValue = result;
+            firstOperand = null;
+            secondOperand = null;
+            firstOperator = null;
+        }
+        
+    }
+}
+
+function clearDisplay() {
+    firstOperand = null;
+    currentOperator = null;
+    secondOperand = null;
+    displayValue = '0';
+}
+
+function inputDecimal(dec) {
+    if (displayValue.includes(dec)) {
+        return;
+    } else {
+        String(displayValue = displayValue + dec);
+    }
+}
+
+function inputPercent() {
+    displayValue = String(displayValue / 100);
+}
+
+function inputSignSwitch() {
+    displayValue = String(displayValue * -1);
+}
 
 // operate function
 function operate(operator, num1, num2) {
@@ -80,7 +140,7 @@ function operate(operator, num1, num2) {
         return num1 * num2;
     } else if (operator === '/') {
         if (num2 === 0) {
-            return null;
+            return 'lol';
         } else {
             return num1 / num2;
         }
