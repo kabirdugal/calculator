@@ -1,3 +1,3 @@
 # calculator
 
-Basic calculator implementation using HTML, CSS and JavaScript.
+[Basic calculator implementation]{https://kabirdugal.github.io/calculator/} using HTML, CSS and JavaScript. 
