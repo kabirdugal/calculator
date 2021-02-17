@@ -53,9 +53,9 @@ footer {
 }
 
 .btn:hover {
-    background-color: lightskyblue;
     cursor: pointer;
 }
+
 
 .span-btn {
     grid-column-start: span 2;
@@ -65,11 +65,24 @@ footer {
     background-color: orange;
 }
 
+.op-btn:active, .equals-btn:active, .op-btn:hover, .equals-btn:hover {
+    background-color: white;
+    color: orange;
+}
+
 .clear-btn, .plus-minus-btn, .percent-btn {
     background-color: lightgray;
     color: black;
 }
 
+.clear-btn:active, .plus-minus-btn:active, .percent-btn:active, .clear-btn:hover, .plus-minus-btn:hover, .percent-btn:hover {
+    background-color: white;
+}
+
 .num-btn, .decimal-btn {
     background-color: gray;
+}
+
+.num-btn:active, .decimal-btn:active, .num-btn:hover, .decimal-btn:hover {
+    background-color: darkgray;
 }
